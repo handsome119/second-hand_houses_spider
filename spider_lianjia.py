@@ -13,7 +13,7 @@ bjdistricts ={'东城区':'dongcheng','西城区':'xicheng','朝阳区':'chaoyan
               '通州区':'tongzhou','昌平区':'changping','大兴区':'daxing','亦庄开发区':'yizhuangkaifaqu','顺义区':'shunyi','房山区':'fangshan',\
               '门头沟区':'mentougou','平谷区':'pinggu','怀柔区':'huairou','密云区':'miyun','延庆区':'yanqing','燕郊':'yanjiao','香河':'xianghe'} 
 #
-PAGES = 100 # Based on bjdistricts[TARGETDIST], 
+PAGES = 50 # Based on bjdistricts[TARGETDIST], 
            # configure PAGES form `https://bj.lianjia.com/ershoufang/bjdistricts[TARGETDIST]`
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------##
@@ -58,7 +58,7 @@ def fillHomeList(hlist, html):
 
         
         app_positionInfo = ele.find('div',class_='positionInfo').get_text().split('/')
-        lnglat = getlocation(TARGETCITY +' '+TARGETDIST +' '+ app_positionInfo[2] + ' ' + name_houseInfo) #add latitude/longitude
+        lnglat = getlocation(TARGETCITY +' '+TARGETDIST +' '+ app_positionInfo[2] + ' ' + name_houseInfo) #add latitude/longitude from baidu API
         #district No.,housecode,houseInfo['Name','Style','Area(m2)','Direct','Docorat'],positionInfo['Floor','Time','Address'],priceInfo,location(longitude,latitude)
         totalPrice = ele.find('div',class_='priceInfo').span.string
         fol_followInfo = ele.find('div',class_='followInfo').get_text().split('/')[0][:-3]
@@ -109,26 +109,3 @@ def main():
   
 if __name__ == '__main__':
 	main()
-
-# def fillHomeList(hlist, html):
-#     soup = BeautifulSoup(html, 'html.parser')
-#     for ele in soup.find_all('li',class_='clear'):
-#         houseInfoTag = ele.find('div',class_='houseInfo')
-#         app_houseInfo = houseInfoTag.get_text().split('/',4)
-#         app_houseInfo[2] = app_houseInfo[2][:-2] # del unit'平米'
-#         app_positionInfo = ele.find('div',class_='positionInfo').get_text().split('/')
-#         lnglat = 0#getlocation(TARGETCITY +' '+TARGETDIST + app_positionInfo[2] + ' ' + app_houseInfo[0]) #add latitude/longitude
-#         #district No.,housecode,houseInfo['Name','Style','Area(m2)','Direct','Docorat'],positionInfo['Floor','Time','Address'],priceInfo,location(longitude,latitude)
-#         totalPrice = ele.find('div',class_='priceInfo').span.string
-#         fol_followInfo = ele.find('div',class_='followInfo').get_text().split('/')[0][:-3]
-#         visit_followInfo = ele.find('div',class_='followInfo').get_text().split('/')[1].split('次')[0]
-#         ###
-#         if ele.a.get('data-housecode') == "101102793039":#天翠园/叠拼别墅 info error
-#             continue
-#         ###
-#         avgPrice = round(10000*float(totalPrice)/float(app_houseInfo[2]))
-#         hlist.append([houseInfoTag.a.get('href').split('/')[-2]]+\
-#                         [ele.a.get('data-housecode')]+\
-#                         app_houseInfo+\
-#                         app_positionInfo+\
-#                         [totalPrice,avgPrice,fol_followInfo,visit_followInfo,lnglat])
